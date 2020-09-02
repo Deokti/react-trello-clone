@@ -53,7 +53,7 @@ const ToggleBackground: React.FC<TypeToggleBackgroundProps> = (
   return (
     <div ref={backgroundColorRef} className={`toggle-background ${backgroundActive}`}>
       <div className="toggle-background__header">
-        <h3 className="toggle-background__title">Изменить Фон</h3>
+        <h2 className="toggle-background__title">Изменить Фон</h2>
       </div>
 
       <ul className="toggle-background__list">

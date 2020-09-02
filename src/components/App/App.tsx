@@ -4,6 +4,7 @@ import Header from "../header";
 import './App.scss';
 import { connect } from "react-redux";
 import ToggleBackground from "../toggle-background";
+import TrelloListContainer from "../trello-list-container/trello-list-container";
 
 type TypeAppProps = {
   currentBackgroundColor: string
@@ -13,11 +14,12 @@ const App: React.FC<TypeAppProps> = ({ currentBackgroundColor }: TypeAppProps) =
 
   return (
     <main className="app" style={{backgroundColor: currentBackgroundColor}}>
-      <div className="app-top-header">
-        <Header />
-      </div>
-
+      <Header />
       <ToggleBackground />
+
+      <section className="app-content">
+        <TrelloListContainer />
+      </section>
     </main>
   )
 };
