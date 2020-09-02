@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 4rem;
+
+  background-color: rgba(#000, .15);
+  padding: 1rem 4rem;
+  &-title {
+    font-family: Merriweather, sans-serif;
+    font-weight: 700;
+    font-size: 2.3rem;
+    margin-bottom: 0;
+    font-style: italic;
+    color: #fff;
+  }
+  &-background {
+    border: none;
+    background-color: transparent;
+    font-family: 'Merriweather', serif;
+    font-size: 1.6rem;
+    color: #fff;
+  }
+}

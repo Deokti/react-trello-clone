@@ -1,0 +1,13 @@
+$transition-delay: .3s;
+
+.toggle-background__item,
+.toggle-background__item span,
+.toggle-background {
+  transition:
+          background-color $transition-delay ease-in,
+          opacity $transition-delay ease-in;
+}
+
+.toggle-background {
+  transition: all .18s ease-in
+}
