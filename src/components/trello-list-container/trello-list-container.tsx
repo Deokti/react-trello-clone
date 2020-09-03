@@ -13,7 +13,11 @@ type TypeTrelloListContainerProps = {
 const TrelloListContainer: React.FC<TypeTrelloListContainerProps> = ({ arrayTrelloListColumn }: TypeTrelloListContainerProps) => {
 
   const templateTrelloList = arrayTrelloListColumn.map(({ id, title, cards }) => {
-    return <TrelloListColumn key={id} title={title} cards={cards} />
+    return <TrelloListColumn
+      trelloColumnId={id}
+      key={id}
+      title={title}
+      cards={cards} />
   })
 
   return (

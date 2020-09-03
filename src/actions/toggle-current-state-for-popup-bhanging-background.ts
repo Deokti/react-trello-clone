@@ -5,4 +5,4 @@ const toggleCurrentStateForPopupChangingBackground = (toggleState: boolean) => {
   }
 }
 
-export { toggleCurrentStateForPopupChangingBackground }
+export default toggleCurrentStateForPopupChangingBackground;

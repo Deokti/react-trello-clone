@@ -18,7 +18,26 @@ type GetUpdateDynamicArrays = {
 }
 
 type ReturnUpdateDynamicArrays = {
-  arrayTrelloListColumn: Array<TypeOneTrelloColumn | null>
+  arrayTrelloListColumn: Array<TypeOneTrelloColumn | null | undefined>
+}
+
+const updateCardItem = (prevItem: TypeOneTrelloColumn | null, label: string) => {
+  const newCard = { id: Date.now(), label: label };
+  if (prevItem) {
+    return {
+      ...prevItem,
+      cards: [...prevItem.cards, newCard]
+    }
+  }
+}
+
+const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null>, item: TypeOneTrelloColumn | undefined, index: number) => {
+  return [
+    ...columnList.slice(0, index),
+    item,
+    ...columnList.slice(index + 1),
+  ]
+
 }
 
 const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: ActionsType): ReturnUpdateDynamicArrays => {
@@ -69,6 +88,17 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
         ]
       }
 
+    case "ADD_NEW_CARD":
+      const { id, label } = payload;
+      const indexCard = state.dynamicArrays.arrayTrelloListColumn.findIndex((item) => item?.id === id );
+      const getCard = state.dynamicArrays.arrayTrelloListColumn[indexCard];
+
+      const newCard = updateCardItem(getCard, label);
+
+      return {
+        ...state.dynamicArrays,
+        arrayTrelloListColumn: updateColumnItem(state.dynamicArrays.arrayTrelloListColumn, newCard, indexCard)
+      }
 
     default:
       return state.dynamicArrays

@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from "react-redux";
+import { addNewCard, addNewColumn } from "../../actions";
+import { hideNotClickingElement } from "../../utils";
 
 import './add-form.scss';
-import { hideNotClickingElement } from "../../utils";
-import { connect } from "react-redux";
-import { addNewColumn } from "../../actions";
 
 type TypeAddFormProps = {
   column?: boolean
   onHideForm(currentState: boolean): void
   addNewColumn(title: string): any
+  addNewCard(id: number, label: string): any
+  trelloColumnId?: number
 }
 
-const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn }: TypeAddFormProps) => {
+const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn, addNewCard, trelloColumnId }: TypeAddFormProps) => {
   const formRef = React.createRef<HTMLFormElement>();
   const [textarea, setTextarea] = useState('');
 
@@ -19,7 +21,7 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn 
   const textareaPlaceholder = column ? 'Введите название колонки' : 'Введите название карточки';
   const cardButtonTitle = !columnButtonTitle ? 'Добавить новую карточку' : '';
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onAddColumn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (textarea.length >= 5) {
       addNewColumn(textarea.trim());
@@ -27,11 +29,23 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn 
       onHideForm(false);
     }
   }
+  const onAddCard = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (textarea.length >= 5) {
+      if (trelloColumnId != null) {
+        addNewCard(trelloColumnId, textarea.trim());
+        setTextarea('');
+        onHideForm(false);
+      }
+    }
+  }
+
   const onCloseForm = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onHideForm(false);
   }
 
+  // Контролирует состояние textarea
   const onChangeTextTextarea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextarea(event.currentTarget.value);
   }
@@ -46,7 +60,7 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn 
   }, [clickOutsideTheElement]);
 
   return (
-    <form ref={formRef} className='form' id="form" onSubmit={onSubmit}>
+    <form ref={formRef} className='form' id="form" onSubmit={column ? onAddColumn : onAddCard}>
       <div className="form-container">
         <textarea
           autoFocus={true}
@@ -70,7 +84,8 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn 
 };
 
 const mapDispatchToProps = {
-  addNewColumn
+  addNewColumn,
+  addNewCard
 }
 
 export default connect(null, mapDispatchToProps)(AddForm);
