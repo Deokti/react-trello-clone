@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { toggleCurrentBackgroundColor, toggleCurrentStateForPopupChangingBackground } from "../../actions";
+import { hideNotClickingElement } from '../../utils';
 import { connect } from "react-redux";
 
 import './toggle-background.scss';
@@ -25,12 +26,12 @@ const ToggleBackground: React.FC<TypeToggleBackgroundProps> = (
     toggleCurrentStateForPopupChangingBackground(false);
   }
 
+
   // Если произошёл клик не на окна выбора темы, то окно закроется
   const clickOutsideTheElement = useCallback((event: any) => {
-    if (backgroundColorRef && !event.path.includes(backgroundColorRef.current)) {
-      toggleCurrentStateForPopupChangingBackground(false);
-    }
-  }, [backgroundColorRef, toggleCurrentStateForPopupChangingBackground]);
+    hideNotClickingElement(event, backgroundColorRef, toggleCurrentStateForPopupChangingBackground);
+  }, [toggleCurrentStateForPopupChangingBackground, backgroundColorRef]);
+
   useEffect(() => {
     document.body.addEventListener('click', clickOutsideTheElement);
     return () => document.body.removeEventListener('click', clickOutsideTheElement);

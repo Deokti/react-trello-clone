@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TrelloListCard from "../trello-list-card";
+import AddNewElement from "../add-new-element";
+import { TypeOneTrelloCard } from "../../reducers/dynamic-arrays";
 
 import './trello-list-column.scss';
 
 type TypeTrelloListColumnProps = {
   title: string,
-  cards: any[]
+  cards: Array<TypeOneTrelloCard>
 }
 
 const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, cards }: TypeTrelloListColumnProps) => {
+  const [ maxHeightColumn, setMaxHeightColumn ] = useState(0);
+
+  useEffect(() => {
+    const calculateHeight = document.documentElement.clientHeight - 215;
+    setMaxHeightColumn(calculateHeight);
+  }, [maxHeightColumn]);
 
   const templateCard = cards.map(({ id, label }) => {
     return (
@@ -24,9 +32,13 @@ const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, cards }:
         <h3 className="trello-list-column__title">{title}</h3>
       </div>
 
-      <ul className="trello-list-column__list">
+      <ul className="trello-list-column__list" style={{maxHeight: maxHeightColumn}}>
         {templateCard}
       </ul>
+
+      <div className="trello-list-column__bottom">
+        <AddNewElement />
+      </div>
     </div>
   );
 };
