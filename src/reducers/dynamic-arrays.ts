@@ -13,12 +13,12 @@ export type TypeOneTrelloCard = {
 
 type GetUpdateDynamicArrays = {
   dynamicArrays: {
-    arrayTrelloListColumn: Array<TypeOneTrelloColumn>
+    arrayTrelloListColumn: Array<TypeOneTrelloColumn | null>
   }
 }
 
 type ReturnUpdateDynamicArrays = {
-  arrayTrelloListColumn: Array<TypeOneTrelloColumn>
+  arrayTrelloListColumn: Array<TypeOneTrelloColumn | null>
 }
 
 const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: ActionsType): ReturnUpdateDynamicArrays => {
@@ -43,7 +43,7 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
             {id: 1, label: 'Накидать тем для статей в блог'},
           ]
         },
-      ]
+      ],
     }
   }
 
@@ -53,6 +53,22 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
         ...state.dynamicArrays,
         arrayTrelloListColumn: payload
       }
+
+    case "ADD_NEW_COLUMN":
+      const column = {
+        id: Date.now(),
+        title: payload,
+        cards: [],
+      };
+
+      return {
+        ...state.dynamicArrays,
+        arrayTrelloListColumn: [
+          ...state.dynamicArrays.arrayTrelloListColumn,
+          column
+        ]
+      }
+
 
     default:
       return state.dynamicArrays

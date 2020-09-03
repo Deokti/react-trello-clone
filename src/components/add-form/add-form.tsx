@@ -1,15 +1,19 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import './add-form.scss';
 import { hideNotClickingElement } from "../../utils";
+import { connect } from "react-redux";
+import { addNewColumn } from "../../actions";
 
 type TypeAddFormProps = {
   column?: boolean
   onHideForm(currentState: boolean): void
+  addNewColumn(title: string): any
 }
 
-const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm }: TypeAddFormProps) => {
+const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn }: TypeAddFormProps) => {
   const formRef = React.createRef<HTMLFormElement>();
+  const [textarea, setTextarea] = useState('');
 
   const columnButtonTitle = column ? 'Добавить новую колонку' : '';
   const textareaPlaceholder = column ? 'Введите название колонки' : 'Введите название карточки';
@@ -17,10 +21,19 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm }: TypeAddForm
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (textarea.length >= 5) {
+      addNewColumn(textarea.trim());
+      setTextarea('');
+      onHideForm(false);
+    }
   }
   const onCloseForm = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onHideForm(false);
+  }
+
+  const onChangeTextTextarea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextarea(event.currentTarget.value);
   }
 
   // Закрытие формы при клике не по ней или её потомкам
@@ -35,7 +48,11 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm }: TypeAddForm
   return (
     <form ref={formRef} className='form' id="form" onSubmit={onSubmit}>
       <div className="form-container">
-        <textarea className="form-textarea" placeholder={textareaPlaceholder} />
+        <textarea
+          autoFocus={true}
+          onChange={onChangeTextTextarea}
+          className="form-textarea"
+          placeholder={textareaPlaceholder} />
 
         <div className="form-buttons">
           <button className="form-button form-add">
@@ -50,6 +67,10 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm }: TypeAddForm
       </div>
     </form>
   );
+};
+
+const mapDispatchToProps = {
+  addNewColumn
 }
 
-export default AddForm;
+export default connect(null, mapDispatchToProps)(AddForm);
