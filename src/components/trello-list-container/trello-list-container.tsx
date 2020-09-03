@@ -4,6 +4,7 @@ import { TypeOneTrelloColumn } from "../../reducers/dynamic-arrays";
 import { connect } from "react-redux";
 
 import './trello-list-container.scss';
+import AddNewElement from "../add-new-element";
 
 type TypeTrelloListContainerProps = {
   arrayTrelloListColumn: Array<TypeOneTrelloColumn>
@@ -18,6 +19,7 @@ const TrelloListContainer: React.FC<TypeTrelloListContainerProps> = ({ arrayTrel
   return (
     <div className="trello-list-container">
       {templateTrelloList}
+      <AddNewElement column={true} />
     </div>
   )
 };

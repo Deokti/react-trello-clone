@@ -32,6 +32,7 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
             { id: 0, label: 'Пройти курс по React' },
             { id: 1, label: 'Сделать бекенд своего сайта на node.js' },
             { id: 2, label: 'Записаться на курсы английского языка' },
+            { id: 3, label: 'Пройти курс по React' },
           ]
         },
         {

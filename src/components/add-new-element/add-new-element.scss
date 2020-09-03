@@ -1,0 +1,21 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: #DFE3E6;
+  border-radius: 3px;
+  padding: 1.2rem 0;
+  font-size: 1.3rem;
+  color: #6B808C;
+  &:focus { outline: none; }
+  &-text { padding-left: .6rem; }
+  &:hover { background-color: darken(#DFE3E6, 3); }
+}
+
+.add-new-list {
+  width: 30rem;
+}
+.add-new-card {
+  width: 100%;
+}
