@@ -8,10 +8,11 @@ import './trello-list-column.scss';
 type TypeTrelloListColumnProps = {
   title: string,
   cards: Array<TypeOneTrelloCard>
+  trelloColumnId?: number
 }
 
-const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, cards }: TypeTrelloListColumnProps) => {
-  const [ maxHeightColumn, setMaxHeightColumn ] = useState(0);
+const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, cards, trelloColumnId }: TypeTrelloListColumnProps) => {
+  const [maxHeightColumn, setMaxHeightColumn] = useState(0);
 
   useEffect(() => {
     const calculateHeight = document.documentElement.clientHeight - 215;
@@ -37,7 +38,7 @@ const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, cards }:
       </ul>
 
       <div className="trello-list-column__bottom">
-        <AddNewElement />
+        <AddNewElement column={false} trelloColumnId={trelloColumnId} />
       </div>
     </div>
   );

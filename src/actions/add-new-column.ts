@@ -5,4 +5,4 @@ const addNewColumn = (title: string) => {
   }
 };
 
-export { addNewColumn };
+export default addNewColumn;

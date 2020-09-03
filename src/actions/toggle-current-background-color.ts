@@ -5,4 +5,4 @@ const toggleCurrentBackgroundColor = (currentState: string) => {
   }
 }
 
-export { toggleCurrentBackgroundColor };
+export default toggleCurrentBackgroundColor;
