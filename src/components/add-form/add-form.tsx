@@ -6,7 +6,7 @@ import { hideNotClickingElement } from "../../utils";
 import './add-form.scss';
 
 type TypeAddFormProps = {
-  column?: boolean
+  column: boolean
   onHideForm(currentState: boolean): void
   addNewColumn(title: string): any
   addNewCard(id: number, label: string): any
@@ -26,17 +26,13 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn,
     if (textarea.length >= 5) {
       addNewColumn(textarea.trim());
       setTextarea('');
-      onHideForm(false);
     }
   }
   const onAddCard = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (textarea.length >= 5) {
-      if (trelloColumnId != null) {
-        addNewCard(trelloColumnId, textarea.trim());
-        setTextarea('');
-        onHideForm(false);
-      }
+    if (textarea.length >= 5 && trelloColumnId != null) {
+      addNewCard(trelloColumnId, textarea.trim());
+      setTextarea('');
     }
   }
 
@@ -66,6 +62,7 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn,
           autoFocus={true}
           onChange={onChangeTextTextarea}
           className="form-textarea"
+          value={textarea}
           placeholder={textareaPlaceholder} />
 
         <div className="form-buttons">

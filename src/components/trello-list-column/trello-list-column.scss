@@ -1,9 +1,14 @@
 .trello-list-column {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  position: relative;
+  white-space: normal;
+
   width: 30rem;
   background-color: #EBECF0;
   border-radius: .5rem;
   margin-right: 2rem;
-  height: 100%;
   &__header {
     display: flex;
     align-items: center;
@@ -18,11 +23,14 @@
     margin-bottom: 0;
   }
   &__list {
-    overflow: auto;
     margin-top: 1rem;
     list-style: none;
     padding-left: 0;
     margin-bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1;
+    min-height: 0;
   }
   &__item {
     margin-bottom: 1rem;

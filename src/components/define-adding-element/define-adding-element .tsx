@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import AddForm from "../add-form";
 
-import './add-new-element.scss';
+import './define-adding-element .scss';
 import AddButton from "../add-button/add-button";
 
 type TypeAddNewElementProps = {
-  column?: boolean
+  column: boolean
   trelloColumnId?: number
 }
 
-const AddNewElement: React.FC<TypeAddNewElementProps> = ({ column, trelloColumnId }: TypeAddNewElementProps) => {
+const DefineAddingElement: React.FC<TypeAddNewElementProps> = ({ column, trelloColumnId }: TypeAddNewElementProps) => {
   const [showForm, setShowForm] = useState(false);
 
   const onShowForm = () => setShowForm(true);
@@ -25,4 +25,4 @@ const AddNewElement: React.FC<TypeAddNewElementProps> = ({ column, trelloColumnI
   )
 };
 
-export default AddNewElement;
+export default DefineAddingElement;

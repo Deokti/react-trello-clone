@@ -1,46 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import TrelloListCard from "../trello-list-card";
-import AddNewElement from "../add-new-element";
+import DefineAddingElement from "../define-adding-element";
 import { TypeOneTrelloCard } from "../../reducers/dynamic-arrays";
+import { Droppable } from 'react-beautiful-dnd';
 
 import './trello-list-column.scss';
 
 type TypeTrelloListColumnProps = {
   title: string,
-  cards: Array<TypeOneTrelloCard>
-  trelloColumnId?: number
+  children: Array<TypeOneTrelloCard>
+  trelloColumnId: number
 }
 
-const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, cards, trelloColumnId }: TypeTrelloListColumnProps) => {
-  const [maxHeightColumn, setMaxHeightColumn] = useState(0);
-
-  useEffect(() => {
-    const calculateHeight = document.documentElement.clientHeight - 215;
-    setMaxHeightColumn(calculateHeight);
-  }, [maxHeightColumn]);
-
-  const templateCard = cards.map(({ id, label }) => {
-    return (
-      <li key={id} className="trello-list-column__item">
-        <TrelloListCard label={label} />
-      </li>
-    );
-  });
+const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, children, trelloColumnId }: TypeTrelloListColumnProps) => {
+  // const templateCard =
 
   return (
-    <div className="trello-list-column">
-      <div className="trello-list-column__header">
-        <h3 className="trello-list-column__title">{title}</h3>
-      </div>
+    <Droppable droppableId={trelloColumnId.toString()}>
+      {(provided: any) => {
+        return (
+          <div ref={provided.innerRef}
+            className="trello-list-column"
+            {...provided.droppableProps}>
+            <div className="trello-list-column__header">
+              <h3 className="trello-list-column__title">{title}</h3>
+            </div>
 
-      <ul className="trello-list-column__list" style={{maxHeight: maxHeightColumn}}>
-        {templateCard}
-      </ul>
-
-      <div className="trello-list-column__bottom">
-        <AddNewElement column={false} trelloColumnId={trelloColumnId} />
-      </div>
-    </div>
+            <ul className="trello-list-column__list">
+              {
+                children.map(({ id, label }, index) => {
+                  return (
+                    <li key={id} className="trello-list-column__item">
+                      <TrelloListCard
+                        index={index}
+                        label={label}
+                        trelloCardId={id}
+                        trelloColumnId={trelloColumnId} />
+                    </li>
+                  );
+                })
+              }
+            </ul>
+            {provided.placeholder}
+            <div className="trello-list-column__bottom">
+              <DefineAddingElement column={false} trelloColumnId={trelloColumnId} />
+            </div>
+          </div>
+        )
+      }}
+    </Droppable>
   );
 };
 

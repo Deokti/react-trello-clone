@@ -31,13 +31,26 @@ const updateCardItem = (prevItem: TypeOneTrelloColumn | null, label: string) => 
   }
 }
 
-const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null>, item: TypeOneTrelloColumn | undefined, index: number) => {
+const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null | undefined>, item: any, index: number) => {
   return [
     ...columnList.slice(0, index),
     item,
     ...columnList.slice(index + 1),
   ]
 
+}
+
+const deleteCardItem = (columnList: Array<TypeOneTrelloColumn | null | undefined | any>,  indexColumn: number, indexCard: number) => {
+  const columnIndex = columnList.findIndex(item => item?.id === indexColumn);
+  const column = columnList[columnIndex];
+  const cardIndex = column?.cards.findIndex((item: any) => item.id === indexCard);
+
+  const newOneColumn = { ...column, cards: [
+      ...column?.cards.slice(0, cardIndex),
+      ...column?.cards.slice(cardIndex + 1),
+    ] }
+
+  return updateColumnItem(columnList, newOneColumn, columnIndex)
 }
 
 const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: ActionsType): ReturnUpdateDynamicArrays => {
@@ -48,18 +61,18 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
           id: 0,
           title: 'Название списка дел',
           cards: [
-            { id: 0, label: 'Пройти курс по React' },
-            { id: 1, label: 'Сделать бекенд своего сайта на node.js' },
-            { id: 2, label: 'Записаться на курсы английского языка' },
-            { id: 3, label: 'Пройти курс по React' },
+            { id: 1, label: 'Пройти курс по React' },
+            { id: 2, label: 'Сделать бекенд своего сайта на node.js' },
+            { id: 3, label: 'Записаться на курсы английского языка' },
+            { id: 4, label: 'Пройти курс по React' },
           ]
         },
         {
           id: 1,
           title: 'Добавить новое дело',
           cards: [
-            {id: 0, label: 'Забронировать тир на субботу'},
-            {id: 1, label: 'Накидать тем для статей в блог'},
+            {id: 5, label: 'Забронировать тир на субботу'},
+            {id: 6, label: 'Накидать тем для статей в блог'},
           ]
         },
       ],
@@ -98,6 +111,14 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       return {
         ...state.dynamicArrays,
         arrayTrelloListColumn: updateColumnItem(state.dynamicArrays.arrayTrelloListColumn, newCard, indexCard)
+      }
+
+    case "REMOVE_CARD":
+      const { trelloColumnId, trelloCardId } = payload;
+
+      return {
+        ...state.dynamicArrays,
+        arrayTrelloListColumn: deleteCardItem(state.dynamicArrays.arrayTrelloListColumn, trelloColumnId, trelloCardId)
       }
 
     default:
