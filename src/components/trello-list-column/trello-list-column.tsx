@@ -19,14 +19,14 @@ const TrelloListColumn: React.FC<TypeTrelloListColumnProps> = ({ title, children
     <Droppable droppableId={trelloColumnId.toString()}>
       {(provided: any) => {
         return (
-          <div ref={provided.innerRef}
-            className="trello-list-column"
-            {...provided.droppableProps}>
+          <div className="trello-list-column">
             <div className="trello-list-column__header">
               <h3 className="trello-list-column__title">{title}</h3>
             </div>
 
-            <ul className="trello-list-column__list">
+            <ul ref={provided.innerRef}
+                className="trello-list-column__list"
+                {...provided.droppableProps}>
               {
                 children.map(({ id, label }, index) => {
                   return (

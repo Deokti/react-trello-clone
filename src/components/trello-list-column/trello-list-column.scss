@@ -24,16 +24,11 @@
   }
   &__list {
     margin-top: 1rem;
+    margin-bottom: 0;
     list-style: none;
     padding-left: 0;
-    margin-bottom: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
     z-index: 1;
     min-height: 0;
-  }
-  &__item {
-    margin-bottom: 1rem;
   }
   &__header,
   &__list{
