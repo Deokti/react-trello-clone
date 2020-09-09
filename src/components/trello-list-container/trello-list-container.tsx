@@ -1,10 +1,10 @@
 import React from "react";
 import TrelloListColumn from "../trello-list-column";
+import DefineAddingElement from "../define-adding-element";
 import { TypeOneTrelloColumn } from "../../reducers/dynamic-arrays";
 import { connect } from "react-redux";
 
 import './trello-list-container.scss';
-import AddNewElement from "../add-new-element";
 
 type TypeTrelloListContainerProps = {
   arrayTrelloListColumn: Array<TypeOneTrelloColumn>
@@ -13,17 +13,20 @@ type TypeTrelloListContainerProps = {
 const TrelloListContainer: React.FC<TypeTrelloListContainerProps> = ({ arrayTrelloListColumn }: TypeTrelloListContainerProps) => {
 
   const templateTrelloList = arrayTrelloListColumn.map(({ id, title, cards }) => {
-    return <TrelloListColumn
-      trelloColumnId={id}
-      key={id}
-      title={title}
-      cards={cards} />
+    return (
+      <TrelloListColumn
+        key={id.toString()}
+        title={title}
+        trelloColumnId={id}>
+        {cards}
+      </TrelloListColumn>
+    )
   })
 
   return (
     <div className="trello-list-container">
       {templateTrelloList}
-      <AddNewElement column={true} />
+      <DefineAddingElement column={true} />
     </div>
   )
 };

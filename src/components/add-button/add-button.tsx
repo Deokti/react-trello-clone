@@ -3,7 +3,7 @@ import React from 'react';
 import './add-button.scss';
 
 type TypeAddNewElementProps = {
-  column?: boolean
+  column: boolean
   onShowForm(currentState: boolean): void
 }
 

@@ -22,7 +22,7 @@ type ReturnUpdateDynamicArrays = {
 }
 
 const updateCardItem = (prevItem: TypeOneTrelloColumn | null, label: string) => {
-  const newCard = { id: Date.now(), label: label };
+  const newCard = {id: Date.now(), label: label};
   if (prevItem) {
     return {
       ...prevItem,
@@ -31,7 +31,7 @@ const updateCardItem = (prevItem: TypeOneTrelloColumn | null, label: string) => 
   }
 }
 
-const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null>, item: TypeOneTrelloColumn | undefined, index: number) => {
+const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null | undefined>, item: any, index: number) => {
   return [
     ...columnList.slice(0, index),
     item,
@@ -40,7 +40,39 @@ const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null>, item: T
 
 }
 
-const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: ActionsType): ReturnUpdateDynamicArrays => {
+const deleteCardItem = (columnList: Array<TypeOneTrelloColumn | null | undefined | any>, indexColumn: number, indexCard: number) => {
+  const columnIndex = columnList.findIndex(item => item?.id === indexColumn);
+  const column = columnList[columnIndex];
+  const cardIndex = column?.cards.findIndex((item: any) => item.id === indexCard);
+
+  const newOneColumn = {
+    ...column, cards: [
+      ...column?.cards.slice(0, cardIndex),
+      ...column?.cards.slice(cardIndex + 1),
+    ]
+  }
+
+  return updateColumnItem(columnList, newOneColumn, columnIndex)
+}
+
+const sortingMoveInCurrentColumn = (
+  columnList: Array<TypeOneTrelloColumn | null | undefined>,
+  droppableIdStart: number | string, droppableIdEnd: number | string,
+  droppableIndexStart: number | string, droppableIndexEnd: number | string
+) => {
+  // Получаем данную колонку
+  const column = columnList.find(item => item?.id === Number(droppableIdStart));
+
+  if (column) {
+    const copiedCard = [...column.cards];
+    const removed = copiedCard.splice(Number(droppableIndexStart), 1);
+    copiedCard.splice(Number(droppableIndexEnd), 0, ...removed);
+
+    return {...column, cards: copiedCard}
+  }
+}
+
+const updateDynamicArrays = (state: GetUpdateDynamicArrays, {type, payload}: ActionsType): ReturnUpdateDynamicArrays => {
   if (state === undefined) {
     return {
       arrayTrelloListColumn: [
@@ -48,18 +80,17 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
           id: 0,
           title: 'Название списка дел',
           cards: [
-            { id: 0, label: 'Пройти курс по React' },
-            { id: 1, label: 'Сделать бекенд своего сайта на node.js' },
-            { id: 2, label: 'Записаться на курсы английского языка' },
-            { id: 3, label: 'Пройти курс по React' },
+            {id: 1, label: 'Пройти курс по React'},
+            {id: 2, label: 'Сделать бекенд своего сайта на node.js'},
+            {id: 3, label: 'Записаться на курсы английского языка'},
           ]
         },
         {
           id: 1,
           title: 'Добавить новое дело',
           cards: [
-            {id: 0, label: 'Забронировать тир на субботу'},
-            {id: 1, label: 'Накидать тем для статей в блог'},
+            {id: 5, label: 'Забронировать тир на субботу'},
+            {id: 6, label: 'Накидать тем для статей в блог'},
           ]
         },
       ],
@@ -89,8 +120,8 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       }
 
     case "ADD_NEW_CARD":
-      const { id, label } = payload;
-      const indexCard = state.dynamicArrays.arrayTrelloListColumn.findIndex((item) => item?.id === id );
+      const {id, label} = payload;
+      const indexCard = state.dynamicArrays.arrayTrelloListColumn.findIndex((item) => item?.id === id);
       const getCard = state.dynamicArrays.arrayTrelloListColumn[indexCard];
 
       const newCard = updateCardItem(getCard, label);
@@ -98,6 +129,35 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       return {
         ...state.dynamicArrays,
         arrayTrelloListColumn: updateColumnItem(state.dynamicArrays.arrayTrelloListColumn, newCard, indexCard)
+      }
+
+    case "REMOVE_CARD":
+      const {trelloColumnId, trelloCardId} = payload;
+
+      return {
+        ...state.dynamicArrays,
+        arrayTrelloListColumn: deleteCardItem(state.dynamicArrays.arrayTrelloListColumn, trelloColumnId, trelloCardId)
+      }
+
+    case "SORT_MOVE_CARDS":
+      // Получаем все аргументы, которые передавались в функцию actions
+      const {
+        droppableId, droppableIdEnd, droppableIdStart,
+        droppableIndexEnd, droppableIndexStart
+      } = payload;
+
+      // Сравниваем. Если перетаскивание началось и завершилось в той же самой колонке, то
+      if (droppableIdStart === droppableIdEnd) {
+        const column = state.dynamicArrays.arrayTrelloListColumn.find(item => item?.id === Number(droppableIdStart));
+
+        if (column) {
+          const removed = column.cards.splice(Number(droppableIndexStart), 1);
+          column.cards.splice(Number(droppableIndexEnd), 0, ...removed);
+        }
+      }
+
+      return {
+        ...state.dynamicArrays
       }
 
     default:
