@@ -18,7 +18,7 @@ type GetUpdateDynamicArrays = {
 }
 
 type ReturnUpdateDynamicArrays = {
-  arrayTrelloListColumn: Array<TypeOneTrelloColumn | null | undefined>
+  arrayTrelloListColumn: Array<TypeOneTrelloColumn | null>
 }
 
 const updateCardItem = (prevItem: TypeOneTrelloColumn | null, label: string) => {
@@ -55,20 +55,29 @@ const deleteCardItem = (columnList: Array<TypeOneTrelloColumn | null | undefined
   return updateColumnItem(columnList, newOneColumn, columnIndex)
 }
 
-const sortingMoveInCurrentColumn = (
+const sortingMoveInCurrentCart = (
   columnList: Array<TypeOneTrelloColumn | null | undefined>,
   droppableIdStart: number | string, droppableIdEnd: number | string,
   droppableIndexStart: number | string, droppableIndexEnd: number | string
 ) => {
-  // Получаем данную колонку
-  const column = columnList.find(item => item?.id === Number(droppableIdStart));
+  const columnIndex = columnList.findIndex(item => item?.id === Number(droppableIdStart));
+  const column = columnList[columnIndex];
 
   if (column) {
+    // Копируем в отдельный массив все объекты карточек
     const copiedCard = [...column.cards];
+    // Меняет местоположение, исходя из того, как мы передвинули
     const removed = copiedCard.splice(Number(droppableIndexStart), 1);
     copiedCard.splice(Number(droppableIndexEnd), 0, ...removed);
 
-    return {...column, cards: copiedCard}
+    // Возвращаем все колонки до индекса нужной колонки
+    // Передаём объект с этой колонкой и изменённым положением карточек
+    // Возвращаем все остальные колонки, идущие после нужной
+    return [
+      ...columnList.slice(0, columnIndex),
+      { ...column, cards: copiedCard },
+      ...columnList.slice(columnIndex + 1)
+    ];
   }
 }
 
@@ -151,8 +160,10 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, {type, payload}: Act
         const column = state.dynamicArrays.arrayTrelloListColumn.find(item => item?.id === Number(droppableIdStart));
 
         if (column) {
-          const removed = column.cards.splice(Number(droppableIndexStart), 1);
-          column.cards.splice(Number(droppableIndexEnd), 0, ...removed);
+          return {
+            ...state.dynamicArrays,
+            arrayTrelloListColumn: sortingMoveInCurrentCart(state.dynamicArrays.arrayTrelloListColumn, droppableIdStart, droppableIdEnd, droppableIndexStart, droppableIndexEnd)
+          } as ReturnUpdateDynamicArrays
         }
       }
 
