@@ -90,7 +90,7 @@ const draggingCardInSameColumn = (
   }
 };
 
-const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: ActionsType): ReturnUpdateDynamicArrays => {
+const updateDynamicArrays = (state: GetUpdateDynamicArrays, actions: ActionsType): ReturnUpdateDynamicArrays => {
   if (state === undefined) {
     return {
       arrayTrelloListColumn: [
@@ -115,17 +115,17 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
     }
   }
 
-  switch (type) {
+  switch (actions.type) {
     case 'TRELLO_LIST':
       return {
         ...state.dynamicArrays,
-        arrayTrelloListColumn: payload
+        arrayTrelloListColumn: actions.payload
       }
 
     case "ADD_NEW_COLUMN":
       const column = {
         id: Date.now(),
-        title: payload,
+        title: actions.payload,
         cards: [],
       };
 
@@ -138,7 +138,7 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       }
 
     case "ADD_NEW_CARD":
-      const { id, label } = payload;
+      const { id, label } = actions.payload;
       const indexCard = state.dynamicArrays.arrayTrelloListColumn.findIndex((item) => item?.id === id);
       const getCard = state.dynamicArrays.arrayTrelloListColumn[indexCard];
 
@@ -150,7 +150,7 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       }
 
     case "REMOVE_CARD":
-      const { trelloColumnId, trelloCardId } = payload;
+      const { trelloColumnId, trelloCardId } = actions.payload;
 
       return {
         ...state.dynamicArrays,
@@ -158,7 +158,7 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       }
 
     case "REMOVE_COLUMN":
-      const columnIndex = state.dynamicArrays.arrayTrelloListColumn.findIndex(item => item?.id === payload);
+      const columnIndex = state.dynamicArrays.arrayTrelloListColumn.findIndex(item => item?.id === actions.payload);
 
       return {
         ...state.dynamicArrays,
@@ -173,7 +173,7 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, { type, payload }: A
       const {
         droppableIdEnd, droppableIdStart,
         droppableIndexEnd, droppableIndexStart, type
-      } = payload;
+      } = actions.payload;
 
       // Перетаскивание колонки
       if (type === 'column') {
