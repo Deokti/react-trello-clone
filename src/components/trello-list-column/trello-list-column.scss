@@ -35,3 +35,37 @@
     padding: 0 2rem;
   }
 }
+
+.column-delete {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+  top: 1rem;
+  right: 1rem;
+  padding: 0;
+  width: 1.5rem;
+  height: 2rem;
+  border: none;
+  background-color: #EBECF0;
+  z-index: 15;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: .2rem;
+    top: 50%;
+    left: 50%;
+    background-color: #6B808C;
+  }
+  &::before { transform: translate(-50%, -50%) rotate(45deg); }
+  &::after { transform: translate(-50%, -50%) rotate(-45deg); }
+  &:hover {
+    &::before, &::after {
+      background-color: #303a43;;
+    }
+  }
+}
+

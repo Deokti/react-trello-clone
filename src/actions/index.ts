@@ -4,10 +4,11 @@ import addNewColumn from "./add-new-column";
 import addNewCard from "./add-new-card";
 import removeCard from "./remove-card";
 import sortMoveCards from "./sort-move-cards";
+import removeColumn from "./remove-column";
 
 export {
   toggleCurrentBackgroundColor,
   toggleCurrentStateForPopupChangingBackground,
-  addNewColumn, addNewCard, removeCard,
+  addNewColumn, addNewCard, removeCard, removeColumn,
   sortMoveCards
 };

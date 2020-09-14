@@ -26,13 +26,13 @@ const TrelloListCard: React.FC<TypeTrelloListCardProps> = ({ label, removeCard, 
 
   return (
     <Draggable draggableId={trelloCardId.toString()} index={index}>
-      {(provided: any) => {
+      {(provided) => {
         return (
           <span
             ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            className="trello-list-card">
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                className="trello-list-card">
             <span className="trello-list-card--label">{label}</span>
             <span className='trello-list-card--delete' onClick={onDeleteCard} title="Удалить карточку">
               <svg width="8" fill="#000" height="8" viewBox="0 0 329.26933 329" xmlns="http://www.w3.org/2000/svg">
