@@ -1,4 +1,4 @@
-const sortMoveCards = (droppableIdStart: any, droppableIdEnd: any, droppableIndexStart: any, droppableIndexEnd: any, droppableId: any) => {
+const sortMoveCards = (droppableIdStart: any, droppableIdEnd: any, droppableIndexStart: any, droppableIndexEnd: any, droppableId: any, type: any) => {
   return {
     type: "SORT_MOVE_CARDS",
     payload: {
@@ -6,7 +6,8 @@ const sortMoveCards = (droppableIdStart: any, droppableIdEnd: any, droppableInde
       droppableIdEnd,
       droppableIndexStart,
       droppableIndexEnd,
-      droppableId
+      droppableId,
+      type
     }
   }
 };
