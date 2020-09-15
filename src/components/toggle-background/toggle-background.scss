@@ -6,6 +6,7 @@
   height: 100%;
   background-color: #EBECF0;
   transform: translateX(100%);
+  z-index: 50;
   &__header {
     min-height: 4.1rem;
     border-bottom: .1rem solid #C4C4C4;

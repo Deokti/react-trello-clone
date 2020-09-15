@@ -56,7 +56,12 @@ const AddForm: React.FC<TypeAddFormProps> = ({ column, onHideForm, addNewColumn,
   }, [clickOutsideTheElement]);
 
   return (
-    <form ref={formRef} className='form' id="form" onSubmit={column ? onAddColumn : onAddCard}>
+    <form
+      style={{ marginRight: column ? '4rem' : ''}}
+      ref={formRef}
+      className='form'
+      id="form"
+      onSubmit={column ? onAddColumn : onAddCard}>
       <div className="form-container">
         <textarea
           autoFocus={true}

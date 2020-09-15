@@ -40,6 +40,15 @@ const updateColumnItem = (columnList: Array<TypeOneTrelloColumn | null | undefin
 
 }
 
+const deleteColumnItem = (columnList: Array<TypeOneTrelloColumn | null | undefined | any>, columnId: number,) => {
+  const columnIndex = columnList.findIndex(column => column.id === columnId);
+
+  return [
+    ...columnList.slice(0, columnIndex),
+    ...columnList.slice(columnIndex + 1),
+  ];
+}
+
 const deleteCardItem = (columnList: Array<TypeOneTrelloColumn | null | undefined | any>, indexColumn: number, indexCard: number) => {
   const columnIndex = columnList.findIndex(item => item?.id === indexColumn);
   const column = columnList[columnIndex];
@@ -158,14 +167,9 @@ const updateDynamicArrays = (state: GetUpdateDynamicArrays, actions: ActionsType
       }
 
     case "REMOVE_COLUMN":
-      const columnIndex = state.dynamicArrays.arrayTrelloListColumn.findIndex(item => item?.id === actions.payload);
-
       return {
         ...state.dynamicArrays,
-        arrayTrelloListColumn: [
-          ...state.dynamicArrays.arrayTrelloListColumn.splice(0, columnIndex),
-          ...state.dynamicArrays.arrayTrelloListColumn.splice(columnIndex + 1),
-        ]
+        arrayTrelloListColumn: deleteColumnItem(state.dynamicArrays.arrayTrelloListColumn, actions.payload),
       }
 
     case "SORT_MOVE_CARDS":

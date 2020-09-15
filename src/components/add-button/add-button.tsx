@@ -15,7 +15,7 @@ const AddButton: React.FC<TypeAddNewElementProps> = ({ column, onShowForm }: Typ
   const cardTitle = addNewCart ? 'Добавить еще одну карточку' : ''
 
   return (
-    <button
+    <button style={{ marginRight: column ? '4rem' : ''}}
       onClick={() => onShowForm(true)}
       className={`button add-new-element ${addNewColumn || addNewCart}`}>
       <span className="button-icon">
